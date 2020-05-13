@@ -2,8 +2,7 @@
   "name": "ml-bug-detector",
   "version": "1.0.0",
   "scripts": {
-    "sayHi": "ts-node js-scripts-tokenizer/hello-world.ts",
-    "postinstall": "link-module-alias"
+    "w": "ts-node tokenizer/helpers/parse-js-file.ts"
   },
   "repository": {
     "type": "git",
@@ -16,16 +15,12 @@
   },
   "homepage": "https://github.com/nsbarsukov/ml-bug-detector#readme",
   "devDependencies": {
-    "link-module-alias": "1.2.0",
     "typescript": "3.9.2"
   },
   "dependencies": {
-    "@types/esprima": "^4.0.2",
+    "@types/esprima": "4.0.2",
     "@types/node": "^14.0.1",
     "esprima": "4.0.1",
     "ts-node": "8.10.1"
-  },
-  "_moduleAliases": {
-    "@tokenizer": "js-scripts-tokenizer"
   }
 }
