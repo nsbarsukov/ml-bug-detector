@@ -1,0 +1,29 @@
+{
+  "name": "ml-bug-detector",
+  "version": "1.0.0",
+  "scripts": {
+    "wow": "ts-node js-scripts-tokenizer/exp.ts",
+    "postinstall": "link-module-alias"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nsbarsukov/ml-bug-detector.git"
+  },
+  "author": "Barsukov Nikita",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nsbarsukov/ml-bug-detector/issues"
+  },
+  "homepage": "https://github.com/nsbarsukov/ml-bug-detector#readme",
+  "devDependencies": {
+    "link-module-alias": "1.2.0",
+    "typescript": "3.9.2"
+  },
+  "dependencies": {
+    "@types/node": "^14.0.1",
+    "ts-node": "8.10.1"
+  },
+  "_moduleAliases": {
+    "@tokenizer": "js-scripts-tokenizer"
+  }
+}
