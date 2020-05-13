@@ -2,7 +2,7 @@
   "name": "ml-bug-detector",
   "version": "1.0.0",
   "scripts": {
-    "w": "ts-node tokenizer/helpers/parse-js-file.ts"
+    "tokenize": "ts-node scripts-parser/parser.ts tokenization"
   },
   "repository": {
     "type": "git",
