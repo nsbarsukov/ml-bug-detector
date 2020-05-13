@@ -2,7 +2,7 @@
   "name": "ml-bug-detector",
   "version": "1.0.0",
   "scripts": {
-    "wow": "ts-node js-scripts-tokenizer/exp.ts",
+    "sayHi": "ts-node js-scripts-tokenizer/hello-world.ts",
     "postinstall": "link-module-alias"
   },
   "repository": {
