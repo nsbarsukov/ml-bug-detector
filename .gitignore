@@ -6,5 +6,5 @@ package-lock.json
 
 # IDE
 .idea
-
+.ipynb_checkpoints/
 .DS_Store
