@@ -2,8 +2,7 @@
   "name": "ml-bug-detector",
   "version": "1.0.0",
   "scripts": {
-    "tokenize": "ts-node scripts-parser/parser.ts tokenization",
-    "buildWord2VecModel": "python ./word2Vec/buildWord2VecModel.py"
+    "tokenize": "ts-node scripts-parser/parser.ts tokenization"
   },
   "repository": {
     "type": "git",
@@ -22,7 +21,6 @@
     "@types/esprima": "4.0.2",
     "@types/node": "^14.0.1",
     "esprima": "4.0.1",
-    "python-shell": "^2.0.0",
     "ts-node": "8.10.1"
   }
 }
