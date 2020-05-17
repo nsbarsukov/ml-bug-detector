@@ -2,6 +2,7 @@
   "name": "ml-bug-detector",
   "version": "1.0.0",
   "scripts": {
+    "high-memory-tokenize": "node --max_old_space_size=8192 -r ts-node/register scripts-parser/parser.ts tokenization",
     "tokenize": "ts-node scripts-parser/parser.ts tokenization"
   },
   "repository": {
@@ -19,7 +20,7 @@
   },
   "dependencies": {
     "@types/esprima": "4.0.2",
-    "@types/node": "^14.0.1",
+    "@types/node": "14.0.1",
     "esprima": "4.0.1",
     "ts-node": "8.10.1"
   }

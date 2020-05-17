@@ -14,11 +14,16 @@ interface ITokensJson {
 parseScripts();
 
 function parseScripts() {
+    console.log('Script execution starts!');
+
+    const executionTimeStart = Date.now();
+
     const jsPathsStorage: string[] = [];
-    openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage);
+    openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 100);
 
     const tokensJson: ITokensJson = {};
 
+    console.log('Парсинг скриптов начался. Мод -', parsingType);
     switch (parsingType) {
         case 'tokenization':
             jsPathsStorage.forEach(jsFilePathWithName => {
@@ -31,22 +36,28 @@ function parseScripts() {
         mkdirSync(FOLDER_NAME_PUT_PARSED_SCRIPTS)
     }
 
+    console.log('Сохраняем всё дело в json...');
     writeFileSync(
         `${FOLDER_NAME_PUT_PARSED_SCRIPTS}/parsed-scripts.json`,
-        JSON.stringify(tokensJson, null, 2)
+        JSON.stringify(tokensJson, null, 2),
+        {encoding:'utf8', flag:'w'}
     );
+
+    console.log('Было токенизировано', jsPathsStorage.length, 'файла');
+    console.log('Время выполнения скрипта составило', Date.now() - executionTimeStart, 'ms');
 }
 
 /**
  * Открывает указанную директорию и ищет в нём все js файлы (лежащие внутри с любой вложенностью),
  * а после складывает пути к этим js файлам в массив, который был передан вторым аргументом
+ * @param maxDepthFinder - отвечает за максимальную глубину вложенности, после которой уже стоит прекратить
  */
-function openDirectoryAndFindAllJS(path: string, jsPathsStorage: string[]) {
+function openDirectoryAndFindAllJS(path: string, jsPathsStorage: string[], maxDepthFinder = Infinity, currentDepth = 0) {
     const insideEntities = readdirSync(path, {withFileTypes: true}).filter(excludeUselessFiles);
 
     insideEntities.forEach(entity => {
-        if (entity.isDirectory()) {
-            openDirectoryAndFindAllJS(`${path}/${entity.name}`, jsPathsStorage);
+        if (entity.isDirectory() && currentDepth <= maxDepthFinder) {
+            openDirectoryAndFindAllJS(`${path}/${entity.name}`, jsPathsStorage, maxDepthFinder, currentDepth++);
         } else if (entity.isFile() && entity.name.endsWith('.js')) {
             jsPathsStorage.push(`${path}/${entity.name}`);
         }
