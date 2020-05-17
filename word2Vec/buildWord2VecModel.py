@@ -15,7 +15,7 @@ def train_word2Vec_model(path_to_tokenized_scripts_json):
     tokenized_scripts_list_of_lists = list(tokenized_scripts_dictionary.values())
 
     return Word2Vec(
-        # list of lists. Например: [["cat", "say", "meow"], ["dog", "say", "woof"]]
+        # list of lists. Example: [["cat", "say", "meow"], ["dog", "say", "woof"]]
         sentences=tokenized_scripts_list_of_lists,
 
         # The number of dimensions of the embeddings and the default is 100
@@ -24,10 +24,10 @@ def train_word2Vec_model(path_to_tokenized_scripts_json):
         # The maximum distance between a target word and words around the target word. The default window is 5.
         window=5,
 
-        # финальный размер словаря
+        # final size of vocabulary
         max_final_vocab=10000,
 
-        # игнорировать слова с частотностью ниже, чем эта (регулируется автоматически, если установлено max_final_vocab)
+        # ignore word which freq lower than that number
         min_count=5,
 
         workers=cpu_count(),
