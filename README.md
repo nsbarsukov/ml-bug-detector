@@ -7,7 +7,7 @@
 (в качестве примера несколько файлов сложены сейчас в репозитории).
 
 В данной работе файлы брались с 
-[150k Javascript Dataset](https://www.sri.inf.ethz.ch/js150/?target=_blank).
+[150k Javascript Dataset](https://www.sri.inf.ethz.ch/js150).
 
 Вне зависимости от выбранного типа парсинга - результаты будут сложены `./data/parsed-scripts.json`
 ### Токенизация
