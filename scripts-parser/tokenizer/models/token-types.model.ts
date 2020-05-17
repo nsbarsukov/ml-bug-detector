@@ -23,5 +23,7 @@ export enum TokenTypes {
     Punctuator = 'Punctuator',
     StringLiteral = 'String',
     RegularExpression = 'RegularExpression',
-    Template = 'Template'
+    Template = 'Template',
+    BlockComment = 'BlockComment',
+    LineComment = 'LineComment'
 }
