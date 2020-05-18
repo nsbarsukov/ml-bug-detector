@@ -19,7 +19,7 @@ function parseScripts() {
     const executionTimeStart = Date.now();
 
     const jsPathsStorage: string[] = [];
-    openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 100);
+    openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 50);
 
     const tokensJson: ITokensJson = {};
 
@@ -36,7 +36,7 @@ function parseScripts() {
         mkdirSync(FOLDER_NAME_PUT_PARSED_SCRIPTS)
     }
 
-    console.log('Сохраняем всё дело в json...');
+    console.log('Сохраняем в json', Object.values(tokensJson).length, 'файлов...');
     writeFileSync(
         `${FOLDER_NAME_PUT_PARSED_SCRIPTS}/parsed-scripts.json`,
         JSON.stringify(tokensJson, null, 2),
