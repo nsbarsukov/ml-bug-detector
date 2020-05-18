@@ -1,14 +1,13 @@
-import {Directive, ModuleDeclaration, Statement} from "estree";
 import {parseScript} from "esprima";
 import {readFileSync} from "fs";
 
-import {IParseOptions} from "./models";
+import {IAbstractSyntaxTree, IParseOptions} from "./models";
 
 /**
  *** Read js file
  *** Get Abstract Syntax Tree of the file
  */
-export function getASTJSFile(pathToFile: string): Array<Directive | Statement | ModuleDeclaration> {
+export function getAstOfJSFile(pathToFile: string): IAbstractSyntaxTree {
     const jsfile = readFileSync(pathToFile, {encoding: "utf8"});
     const PARSER_CONFIGS: IParseOptions = {
         tolerant: true,

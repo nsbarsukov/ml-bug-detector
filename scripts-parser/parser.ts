@@ -2,6 +2,8 @@ import {readdirSync, writeFileSync, mkdirSync, existsSync, Dirent} from "fs";
 
 import {tokenizeJSFile} from "./tokenizer/tokenize-js-file";
 import {ITokensJson} from "./tokenizer/models";
+import {getAstOfJSFile} from "./ast/get-ast-from-js-file";
+import {IAbstractSyntaxTreeJson} from "./ast/models";
 
 const FOLDER_NAME_WITH_SCRIPTS = 'scripts';
 const FOLDER_NAME_PUT_PARSED_SCRIPTS = 'data';
@@ -15,7 +17,7 @@ enum PARSING_TYPES {
     /**
      * Abstract Syntax Tree
      */
-    AST = 'ast'
+    AST_4_FUNCTION_ARGS = 'ast-function-arguments'
 }
 
 /**
@@ -24,7 +26,7 @@ enum PARSING_TYPES {
  */
 const PARSED_FILES_JSON_NAME = {
     [PARSING_TYPES.TOKENIZATION]: 'tokenized-scripts.json',
-    [PARSING_TYPES.AST]: 'ast-scripts.json'
+    [PARSING_TYPES.AST_4_FUNCTION_ARGS]: 'ast-scripts.json'
 };
 
 parseScripts();
@@ -37,19 +39,24 @@ function parseScripts() {
     const jsPathsStorage: string[] = [];
     openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 50);
 
-    const tokensJson: ITokensJson = {};
+    const parsedScriptsJson: ITokensJson | IAbstractSyntaxTreeJson = {};
 
     console.log('Парсинг скриптов начался. Мод -', parsingType);
     switch (parsingType) {
         case PARSING_TYPES.TOKENIZATION:
             jsPathsStorage.forEach(jsFilePathWithName => {
-                const tokens = tokenizeJSFile(jsFilePathWithName);
-                tokensJson[jsFilePathWithName] = tokens;
+                parsedScriptsJson[jsFilePathWithName] = tokenizeJSFile(jsFilePathWithName);
             });
             break;
 
-        case PARSING_TYPES.AST:
-            console.log('here');
+        case PARSING_TYPES.AST_4_FUNCTION_ARGS:
+            jsPathsStorage.slice(27, 28).forEach(jsFilePathWithName => {
+                try {
+                    parsedScriptsJson[jsFilePathWithName] = getAstOfJSFile(jsFilePathWithName);
+                } catch(e) {
+                    console.log('Не удалось спарсить файл', jsFilePathWithName);
+                }
+            });
             break;
 
         default:
@@ -62,11 +69,11 @@ function parseScripts() {
         mkdirSync(FOLDER_NAME_PUT_PARSED_SCRIPTS)
     }
 
-    console.log('Сохраняем в json', Object.values(tokensJson).length, 'файлов...');
-    console.log(`Сохраняем в ${PARSED_FILES_JSON_NAME[parsingType]} ${Object.values(tokensJson).length} файлов...`);
+    console.log(`Сохраняем в ${PARSED_FILES_JSON_NAME[parsingType]}.`);
+    console.log('Сохраняем в json', Object.values(parsedScriptsJson).length, 'файлов...');
     writeFileSync(
         `${FOLDER_NAME_PUT_PARSED_SCRIPTS}/${PARSED_FILES_JSON_NAME[parsingType]}`,
-        JSON.stringify(tokensJson, null, 2),
+        JSON.stringify(parsedScriptsJson, null, 2),
         {encoding:'utf8', flag:'w'}
     );
 
