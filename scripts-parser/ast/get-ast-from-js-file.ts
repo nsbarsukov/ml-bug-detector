@@ -16,7 +16,7 @@ export function getAstOfJSFile(pathToFile: string): IAbstractSyntaxTree {
         comment: false,
         jsx: false,
         tokens: false
-    }
+    };
 
     return parseScript(jsfile, PARSER_CONFIGS).body;
 }

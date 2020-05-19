@@ -4,7 +4,8 @@
   "scripts": {
     "high-memory-tokenize": "node --max_old_space_size=8192 -r ts-node/register scripts-parser/parser.ts tokenization",
     "tokenize": "ts-node scripts-parser/parser.ts tokenization",
-    "ast-function-arguments": "ts-node scripts-parser/parser.ts ast-function-arguments"
+    "ast-function-arguments": "ts-node scripts-parser/parser.ts ast-function-arguments",
+    "test": "ts-node scripts-parser/ast/helpers/get-function-arguments"
   },
   "repository": {
     "type": "git",
