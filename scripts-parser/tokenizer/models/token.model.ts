@@ -4,7 +4,3 @@ export interface IToken {
     type: TokenTypes;
     value: string;
 }
-
-export interface ITokensJson {
-    [key: string]: IToken[];
-}

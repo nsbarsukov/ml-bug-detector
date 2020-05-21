@@ -1,9 +1,13 @@
 import {readdirSync, writeFileSync, mkdirSync, existsSync, Dirent} from "fs";
 
 import {tokenizeJSFile} from "./tokenizer/tokenize-js-file";
-import {ITokensJson} from "./tokenizer/models";
+import {IToken} from "./tokenizer/models";
 import {getAstOfJSFile} from "./ast/get-ast-from-js-file";
-import {IAbstractSyntaxTreeJson} from "./ast/models";
+import {getFunctionArgsFromAST, IFunctionStorageItem} from "./ast/helpers";
+
+export interface IParsedScriptsJson {
+    [scriptName: string]: IToken[] | IFunctionStorageItem[];
+}
 
 const FOLDER_NAME_WITH_SCRIPTS = 'scripts';
 const FOLDER_NAME_PUT_PARSED_SCRIPTS = 'data';
@@ -39,7 +43,7 @@ function parseScripts() {
     const jsPathsStorage: string[] = [];
     openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 50);
 
-    const parsedScriptsJson: ITokensJson | IAbstractSyntaxTreeJson = {};
+    const parsedScriptsJson: IParsedScriptsJson = {};
 
     console.log('Парсинг скриптов начался. Мод -', parsingType);
     switch (parsingType) {
@@ -50,9 +54,13 @@ function parseScripts() {
             break;
 
         case PARSING_TYPES.AST_4_FUNCTION_ARGS:
-            jsPathsStorage.slice(27, 28).forEach(jsFilePathWithName => {
+            // const ast = getAstOfJSFile('scripts/bahmutov/js-complexity-viz/src/history.js');
+            // const ast = getAstOfJSFile('scripts/clappr/clappr/src/plugins/google_analytics/google_analytics.js');
+
+            jsPathsStorage.forEach(jsFilePathWithName => {
                 try {
-                    parsedScriptsJson[jsFilePathWithName] = getAstOfJSFile(jsFilePathWithName);
+                    const ast = getAstOfJSFile(jsFilePathWithName);
+                    parsedScriptsJson[jsFilePathWithName] = getFunctionArgsFromAST(ast);
                 } catch(e) {
                     console.log('Не удалось спарсить файл', jsFilePathWithName);
                 }
