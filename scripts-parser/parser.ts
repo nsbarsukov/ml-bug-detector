@@ -47,7 +47,7 @@ function parseScripts() {
     const executionTimeStart = Date.now();
 
     const jsPathsStorage: string[] = [];
-    openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 50);
+    openDirectoryAndFindAllJS(FOLDER_NAME_WITH_SCRIPTS, jsPathsStorage, 100);
 
     const parsedScriptsJson: IParsedScriptsJson = {};
 
@@ -125,7 +125,7 @@ function openDirectoryAndFindAllJS(
 
     insideEntities.forEach(entity => {
         if (entity.isDirectory() && currentDepth <= maxDepthFinder) {
-            openDirectoryAndFindAllJS(`${path}/${entity.name}`, jsPathsStorage, maxDepthFinder, currentDepth++);
+            openDirectoryAndFindAllJS(`${path}/${entity.name}`, jsPathsStorage, maxDepthFinder, currentDepth + 1);
         } else if (entity.isFile() && entity.name.endsWith('.js')) {
             jsPathsStorage.push(`${path}/${entity.name}`);
         }
