@@ -21,7 +21,11 @@ enum PARSING_TYPES {
     /**
      * Abstract Syntax Tree
      */
-    AST_4_FUNCTION_ARGS = 'ast-function-arguments'
+    AST_4_FUNCTION_ARGS = 'ast-function-arguments',
+    /**
+     * раздел дебага некой функциональности (TODO: вырезать в финальном варианте)
+     */
+    DEBUG_MOD = 'debug'
 }
 
 /**
@@ -30,7 +34,9 @@ enum PARSING_TYPES {
  */
 const PARSED_FILES_JSON_NAME = {
     [PARSING_TYPES.TOKENIZATION]: 'tokenized-scripts.json',
-    [PARSING_TYPES.AST_4_FUNCTION_ARGS]: 'ast-scripts.json'
+    [PARSING_TYPES.AST_4_FUNCTION_ARGS]: 'ast-functions.json',
+    [PARSING_TYPES.DEBUG_MOD]: 'debug.json',
+
 };
 
 parseScripts();
@@ -54,9 +60,6 @@ function parseScripts() {
             break;
 
         case PARSING_TYPES.AST_4_FUNCTION_ARGS:
-            // const ast = getAstOfJSFile('scripts/bahmutov/js-complexity-viz/src/history.js');
-            // const ast = getAstOfJSFile('scripts/clappr/clappr/src/plugins/google_analytics/google_analytics.js');
-
             jsPathsStorage.forEach(jsFilePathWithName => {
                 try {
                     const ast = getAstOfJSFile(jsFilePathWithName);
@@ -65,6 +68,21 @@ function parseScripts() {
                     console.log('Не удалось спарсить файл', jsFilePathWithName);
                 }
             });
+            break;
+
+        case PARSING_TYPES.DEBUG_MOD:
+            // const jsFilePath = 'scripts/bahmutov/js-complexity-viz/src/history.js';
+            // const jsFilePath = 'scripts/clappr/clappr/src/plugins/google_analytics/google_analytics.js';
+            const jsFilePath = 'scripts/cockpit-project/cockpit/examples/poc-vnc/include/util.js';
+            const ast = getAstOfJSFile(jsFilePath);
+
+            // writeFileSync(
+            //     `${FOLDER_NAME_PUT_PARSED_SCRIPTS}/ast.json`,
+            //     JSON.stringify(ast, null, 2),
+            //     {encoding:'utf8', flag:'w'}
+            // );
+
+            parsedScriptsJson[jsFilePath] = getFunctionArgsFromAST(ast);
             break;
 
         default:

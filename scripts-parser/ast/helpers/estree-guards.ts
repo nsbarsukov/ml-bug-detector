@@ -2,26 +2,24 @@ import {
     BaseNode,
     CallExpression,
     ClassDeclaration,
-    ExpressionStatement,
     Expression,
+    ExpressionStatement,
     FunctionDeclaration,
     FunctionExpression,
     Identifier,
+    IfStatement,
     MemberExpression,
-    Super,
     Pattern,
-    SpreadElement
+    SpreadElement,
+    Super, BlockStatement, VariableDeclaration
 } from "estree";
 import {Syntax} from "esprima";
 
 export const ESTREE_GUARDS = {
-    /* Элементы с body */
-
     FUNCTIONS_DECLARATION: (node: BaseNode): node is FunctionDeclaration => node.type === Syntax.FunctionDeclaration,
-    FUNCTIONS_EXPRESSIONS: (node: BaseNode): node is FunctionExpression => node.type === Syntax.FunctionExpression,
-    CLASS_DECLARATIONS: (node: BaseNode): node is ClassDeclaration => node.type === Syntax.ClassDeclaration,
-
-    /*_________________*/
+    FUNCTION_EXPRESSION: (node: BaseNode): node is FunctionExpression => node.type === Syntax.FunctionExpression,
+    CLASS_DECLARATION: (node: BaseNode): node is ClassDeclaration => node.type === Syntax.ClassDeclaration,
+    VARIABLE_DECLARATION: (node: BaseNode): node is VariableDeclaration => node.type === Syntax.VariableDeclaration,
 
     EXPRESSION_STATEMENT: (node: BaseNode): node is ExpressionStatement => node.type === Syntax.ExpressionStatement,
     /**
@@ -30,5 +28,8 @@ export const ESTREE_GUARDS = {
     CALL_EXPRESSION: (expression: Expression): expression is CallExpression => expression.type === Syntax.CallExpression,
 
     IDENTIFIER_EXPRESSION: (expression: Expression | Super | Pattern | SpreadElement): expression is Identifier => expression.type === Syntax.Identifier,
-    MEMBER_EXPRESSION: (expression: Expression | Super): expression is MemberExpression => expression.type === Syntax.MemberExpression
+    MEMBER_EXPRESSION: (expression: Expression | Super): expression is MemberExpression => expression.type === Syntax.MemberExpression,
+
+    IF_STATEMENT: (node: BaseNode): node is IfStatement => node.type === Syntax.IfStatement,
+    BLOCK_STATEMENT: (node: BaseNode): node is BlockStatement => node.type === Syntax.BlockStatement,
 };

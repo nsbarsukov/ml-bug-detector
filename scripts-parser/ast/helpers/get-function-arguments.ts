@@ -36,6 +36,31 @@ function findFunctions(ast: IAbstractSyntaxTree, storageRef: IFunctionStorageIte
             findFunctions(entity.body.body, storageRef);
         }
         /**
+         * среди объявлений переменных могут быть и function expressions
+         */
+        else if (ESTREE_GUARDS.VARIABLE_DECLARATION(entity)) {
+            entity.declarations.forEach(declaration => {
+                const declarationId = declaration.id;
+                const declarationInit = declaration.init;
+
+                let varName = '';
+
+                if (ESTREE_GUARDS.IDENTIFIER_EXPRESSION(declarationId)) {
+                    varName = declarationId.name;
+                }
+
+                if (declarationInit && ESTREE_GUARDS.FUNCTION_EXPRESSION(declarationInit)) {
+                    const {params, type} = declarationInit;
+                    const argumentsNames = params
+                        .filter(ESTREE_GUARDS.IDENTIFIER_EXPRESSION)
+                        .map(arg => arg.name);
+
+                    storageRef.push({functionName: varName, argumentsNames, type});
+                    findFunctions(declarationInit.body.body, storageRef);
+                }
+            });
+        }
+        /**
          * Ищем все ВЫЗОВЫ функций
          */
         else if (ESTREE_GUARDS.EXPRESSION_STATEMENT(entity)) {
@@ -69,6 +94,24 @@ function findFunctions(ast: IAbstractSyntaxTree, storageRef: IFunctionStorageIte
                 storageRef.push({type, argumentsNames, functionName});
             }
 
+        }
+        /**
+         * Ищем объявления классов (внутри них могут вызываться функции)
+         */
+        else if (ESTREE_GUARDS.CLASS_DECLARATION(entity)) {
+            const classMethodsDefinitions = entity.body.body;
+            const methodsBodies = classMethodsDefinitions.map(method => method.value.body.body);
+
+            methodsBodies.forEach(methodBody => findFunctions(methodBody, storageRef));
+        }
+        /**
+         * внутри if() блоков также могут быть вызовы функций
+         */
+        else if(ESTREE_GUARDS.IF_STATEMENT(entity)) {
+            const ifBody = entity.consequent;
+            if (ESTREE_GUARDS.BLOCK_STATEMENT(ifBody)) {
+                findFunctions(ifBody.body, storageRef);
+            }
         }
     })
 }
