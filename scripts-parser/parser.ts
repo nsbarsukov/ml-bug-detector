@@ -57,6 +57,7 @@ function parseScripts() {
              * пришлось делить этот процесс на микро задачи
              */
             const partOfJSPathStorage = splitJSFilesPathsStorage(jsPathsStorage);
+            console.log('Парсинг', jsPathsStorage.length, 'разбит на', partOfJSPathStorage.length, 'микрозадачи');
 
             partOfJSPathStorage.forEach((jsPathMiniStorage, index) => {
                 const tokenizedScripts = tokenizeFiles(jsPathMiniStorage);
