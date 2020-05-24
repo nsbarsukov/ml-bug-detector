@@ -55,7 +55,11 @@ function parseScripts() {
     switch (parsingType) {
         case PARSING_TYPES.TOKENIZATION:
             jsPathsStorage.forEach(jsFilePathWithName => {
-                parsedScriptsJson[jsFilePathWithName] = tokenizeJSFile(jsFilePathWithName);
+                try {
+                    parsedScriptsJson[jsFilePathWithName] = tokenizeJSFile(jsFilePathWithName);
+                } catch(e) {
+                    console.log('Не удалось спарсить файл', jsFilePathWithName);
+                }
             });
             break;
 
@@ -100,7 +104,7 @@ function parseScripts() {
     writeFileSync(
         `${FOLDER_NAME_PUT_PARSED_SCRIPTS}/${PARSED_FILES_JSON_NAME[parsingType]}`,
         JSON.stringify(parsedScriptsJson, null, 2),
-        {encoding:'utf8', flag:'w'}
+        {encoding:'utf8', flag: 'w+'}
     );
 
     console.log('Было обработано', jsPathsStorage.length, 'файла');
