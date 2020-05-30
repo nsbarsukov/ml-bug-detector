@@ -156,7 +156,9 @@ function saveResultsToJson(json: IParsedScriptsJson, parsingType: PARSING_TYPES,
         mkdirSync(FOLDER_NAME_PUT_PARSED_SCRIPTS)
     }
 
-    const jsonFileName = `${PARSED_FILES_JSON_NAME[parsingType]}_${prefixToJsonFile}.json`;
+    const jsonFileName = `${PARSED_FILES_JSON_NAME[parsingType]}${
+        prefixToJsonFile ? '_' + prefixToJsonFile: ''
+    }.json`;
 
     console.log(`Сохраняем в ${jsonFileName}.`);
     console.log('Сохраняем в json', Object.values(json).length, 'файлов...');
