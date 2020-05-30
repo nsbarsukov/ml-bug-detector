@@ -51,9 +51,6 @@ pip3 install pandas json gensim multiprocessing tqdm
 
 В данной работе файлы брались с 
 [150k Javascript Dataset](https://www.sri.inf.ethz.ch/js150).
-В точности, c этого датасета были взяты репозитории, чьи названия начинались b-e
-(и кроме репозитория cdnjs)
-(на этих данных строилось все изложение курсовой работы).
 
 Вне зависимости от выбранного типа парсинга - результаты будут сложены `./data` в формате json
 ### Токенизация
@@ -86,3 +83,4 @@ _Результат_: `./data/ast-functions.json`
 Для построения данной модели нужно открыть файл `./word2Vec/buildWord2vecModel.ipynb`.
 
 Результат выполнения данного скрипта (построенная модель) - `word2Vec/word2VecModel`
+Скачать готовую модель можно здесь [по ссылке](https://drive.google.com/drive/folders/1i-3j3RkeK-taTEVkamTHydNroy36pYTy?usp=sharing)
