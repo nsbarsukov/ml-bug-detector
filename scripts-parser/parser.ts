@@ -82,22 +82,17 @@ function parseScripts() {
             break;
 
         case PARSING_TYPES.DEBUG_MOD:
+            const debugParsedScriptsJson: IParsedScriptsJson = {};
+
             // const jsFilePath = 'scripts/bahmutov/js-complexity-viz/src/history.js';
             // const jsFilePath = 'scripts/clappr/clappr/src/plugins/google_analytics/google_analytics.js';
-            // writeFileSync(
-            //     `${FOLDER_NAME_PUT_PARSED_SCRIPTS}/ast.json`,
-            //     JSON.stringify(ast, null, 2),
-            //     {encoding:'utf8', flag:'w'}
-            // );
-            // const parsedScriptsDebugJson: IParsedScriptsJson = {};
-            // saveResultsToJson(parsedScriptsDebugJson, parsingType);
+            // const jsFilePath = 'scripts/adamalex/docker-urlarchiver/app.js';
+            const jsFilePath = 'scripts/mishoo/DynarchLIB/src/deprecated/js/grid.js';
 
-            const parts = splitJSFilesPathsStorage(jsPathsStorage, 500);
+            const ast = getAstOfJSFile(jsFilePath);
+            debugParsedScriptsJson[jsFilePath] = getFunctionArgsFromAST(ast);
 
-            parts.slice(0, 3).forEach((jsPathMiniStorage, index) => {
-                const tokenizedScripts = tokenizeFiles(jsPathMiniStorage);
-                saveResultsToJson(tokenizedScripts, parsingType, `${index}`);
-            });
+            saveResultsToJson(debugParsedScriptsJson, parsingType);
             break;
 
         default:

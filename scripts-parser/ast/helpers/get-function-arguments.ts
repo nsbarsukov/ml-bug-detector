@@ -3,7 +3,7 @@ import {ESTREE_GUARDS} from "./estree-guards";
 
 export interface IFunctionStorageItem {
     functionName: string | null;
-    argumentsNames: string[];
+    argumentsNames: unknown[];
     type: string;
 }
 
@@ -20,7 +20,7 @@ export function getFunctionArgsFromAST(ast: IAbstractSyntaxTree): IFunctionStora
 }
 
 function findFunctions(ast: IAbstractSyntaxTree, storageRef: IFunctionStorageItem[]): void {
-    ast.forEach(entity => {
+    for (let entity of ast) {
         /**
          * Ищем все создания функций
          */
@@ -68,10 +68,28 @@ function findFunctions(ast: IAbstractSyntaxTree, storageRef: IFunctionStorageIte
 
             if (ESTREE_GUARDS.CALL_EXPRESSION(expression)) {
                 const {type, arguments: args, callee} = expression;
-                const argumentsNames = args
-                    .filter(ESTREE_GUARDS.IDENTIFIER_EXPRESSION)
-                    .map(arg => arg.name);
+
+                const argumentsNames = args.map(arg => {
+                    if (ESTREE_GUARDS.IDENTIFIER_EXPRESSION(arg)) {
+                        return arg.name;
+                    } else if (ESTREE_GUARDS.LITERAL_EXPRESSION(arg)) {
+                        return arg.value;
+                    } else if (ESTREE_GUARDS.OBJECT_EXPRESSION(arg)) {
+                        return '{}';
+                    } else {
+                        return '';
+                    }
+                });
                 let functionName = '';
+
+                /**
+                 * IIFE
+                 * Раньше так делали замыкание, чтобы не всплывали переменные выше (изоляция такая)
+                 */
+                if (ESTREE_GUARDS.FUNCTION_EXPRESSION(callee)) {
+                    findFunctions(callee.body.body, storageRef);
+                    continue;
+                }
 
                 /**
                  * вызовы обычных функций
@@ -89,7 +107,6 @@ function findFunctions(ast: IAbstractSyntaxTree, storageRef: IFunctionStorageIte
                         functionName = objectMethod.name;
                     }
                 }
-
 
                 storageRef.push({type, argumentsNames, functionName});
             }
@@ -113,5 +130,5 @@ function findFunctions(ast: IAbstractSyntaxTree, storageRef: IFunctionStorageIte
                 findFunctions(ifBody.body, storageRef);
             }
         }
-    })
+    }
 }

@@ -1,5 +1,6 @@
 import {
     BaseNode,
+    BlockStatement,
     CallExpression,
     ClassDeclaration,
     Expression,
@@ -8,10 +9,13 @@ import {
     FunctionExpression,
     Identifier,
     IfStatement,
+    Literal,
     MemberExpression,
+    ObjectExpression,
     Pattern,
     SpreadElement,
-    Super, BlockStatement, VariableDeclaration
+    Super,
+    VariableDeclaration
 } from "estree";
 import {Syntax} from "esprima";
 
@@ -28,6 +32,8 @@ export const ESTREE_GUARDS = {
     CALL_EXPRESSION: (expression: Expression): expression is CallExpression => expression.type === Syntax.CallExpression,
 
     IDENTIFIER_EXPRESSION: (expression: Expression | Super | Pattern | SpreadElement): expression is Identifier => expression.type === Syntax.Identifier,
+    LITERAL_EXPRESSION: (expression: Expression | SpreadElement): expression is Literal => expression.type === Syntax.Literal,
+    OBJECT_EXPRESSION: (expression: Expression | SpreadElement): expression is ObjectExpression => expression.type === Syntax.ObjectExpression,
     MEMBER_EXPRESSION: (expression: Expression | Super): expression is MemberExpression => expression.type === Syntax.MemberExpression,
 
     IF_STATEMENT: (node: BaseNode): node is IfStatement => node.type === Syntax.IfStatement,
